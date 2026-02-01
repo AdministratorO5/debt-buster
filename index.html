@@ -161,12 +161,11 @@ update();
 </body>
 </html> -->
 
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>ГДЕ ДЕНЬГИ, ЛЕБОВСКИ? v7.3</title>
+    <title>ГДЕ ДЕНЬГИ, ЛЕБОВСКИ? v7.4</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
         :root { --main-color: #00ff00; --warn-color: #ff0000; --gold: #ffd700; }
@@ -186,59 +185,61 @@ update();
 
         .container { 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            min-height: 100vh; width: 100vw; padding: 10px; 
+            min-height: 100vh; width: 100vw; padding: 5px; /* Уменьшил отступы контейнера для большего размера панели */
         }
 
         .panel {
             background: rgba(0, 5, 0, 0.95); border: 1px solid var(--main-color);
-            padding: 25px 20px; width: 95%; max-width: 450px; position: relative;
+            padding: 30px 20px; width: 98%; max-width: 480px; position: relative;
             box-shadow: 0 0 30px rgba(0, 255, 0, 0.15); backdrop-filter: blur(12px);
-            overflow: hidden; border-radius: 4px;
+            overflow: hidden; border-radius: 8px; /* Немного увеличил скругление */
         }
         .panel.evil { border-color: var(--warn-color); box-shadow: 0 0 45px rgba(255, 0, 0, 0.4); }
 
         h1 { 
-            font-size: 18px; text-align: center; color: var(--main-color); 
-            margin: 0 0 20px 0; letter-spacing: 2px; font-weight: 900;
+            font-size: 22px; text-align: center; color: var(--main-color); 
+            margin: 0 0 25px 0; letter-spacing: 1px; font-weight: 900;
             text-shadow: 0 0 10px var(--main-color);
             cursor: pointer; transition: 0.2s;
         }
         h1:active { transform: scale(0.95); }
 
         .info-box { border-bottom: 1px solid rgba(0,255,0,0.2); padding-bottom: 15px; margin-bottom: 20px; }
-        .info-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
-        .label { color: #777; }
-        .value { color: var(--main-color); font-weight: bold; }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 15px; align-items: flex-start; }
+        .label { color: #777; flex-shrink: 0; margin-right: 10px; }
+        .value { color: var(--main-color); font-weight: bold; text-align: right; word-break: break-word; }
 
         .debt-display {
-            margin: 20px 0; padding: 20px; border: 1px dashed var(--main-color); text-align: center;
-            background: rgba(0,255,0,0.03); border-radius: 2px;
+            margin: 20px 0; padding: 25px 15px; border: 1px dashed var(--main-color); text-align: center;
+            background: rgba(0,255,0,0.03); border-radius: 4px;
         }
-        #totalDebt { font-size: 28px; color: var(--gold); font-weight: bold; display: block; margin-bottom: 8px; min-height: 34px; }
-        #percentOnly { font-size: 14px; color: var(--warn-color); font-weight: bold; display: block; min-height: 18px; }
+        #totalDebt { font-size: 32px; color: var(--gold); font-weight: bold; display: block; margin-bottom: 10px; min-height: 38px; }
+        #percentOnly { font-size: 16px; color: var(--warn-color); font-weight: bold; display: block; min-height: 20px; }
 
-        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+        .btn-group { display: flex; flex-direction: column; gap: 15px; width: 100%; }
         button {
-            width: 100%; padding: 20px; border: 1px solid var(--main-color); background: none;
-            color: var(--main-color); font-family: inherit; font-weight: bold; font-size: 14px;
+            width: 100%; padding: 22px; border: 1px solid var(--main-color); background: none;
+            color: var(--main-color); font-family: inherit; font-weight: bold; font-size: 16px;
             cursor: pointer; text-transform: uppercase; transition: 0.2s; position: relative;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
         
-        #payBtn { background: var(--gold); color: #000; border: none; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2); }
+        #payBtn { background: var(--gold); color: #000; border: none; box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3); }
         #evilBtn.active { background: var(--warn-color); color: #fff; border-color: var(--warn-color); }
         
         .glitch-wave { 
-            position: absolute; left: 0; width: 100%; height: 4px; 
+            position: absolute; left: 0; width: 100%; height: 6px; 
             background: rgba(0, 255, 0, 0.7); 
             box-shadow: 0 0 20px var(--main-color);
             display: none; z-index: 100; pointer-events: none;
         }
 
-        @media (max-height: 600px) {
-            .panel { padding: 15px; }
-            .info-row { margin-bottom: 5px; font-size: 12px; }
-            #totalDebt { font-size: 22px; }
+        /* Оптимизация под маленькие или узкие экраны */
+        @media (max-width: 380px) {
+            h1 { font-size: 18px; }
+            #totalDebt { font-size: 26px; }
+            .info-row { font-size: 13px; }
+            button { padding: 18px; font-size: 14px; }
         }
     </style>
 </head>
@@ -248,7 +249,7 @@ update();
 
 <div id="bankPush">
     <div class="push-title"><span>🏦 MBANK</span><span>сейчас</span></div>
-    <div class="push-text" id="pushText">Инициировано списание. Сумма: ---. Получатель: Б. Бекжан.</div>
+    <div class="push-text" id="pushText">Инициировано списание. Сумма: ---. Получатель: Б. Бактыгулов.</div>
 </div>
 
 <div class="container">
@@ -264,7 +265,7 @@ update();
         </div>
         
         <div class="debt-display">
-            <span style="font-size: 11px; color: #888; letter-spacing: 1px;">ТЕКУЩИЙ БАЛАНС ГРЕХОВ:</span>
+            <span style="font-size: 12px; color: #888; letter-spacing: 1px;">ТЕКУЩИЙ БАЛАНС ГРЕХОВ:</span>
             <span id="totalDebt" class="glitchable">30000.00000</span>
             <span id="percentOnly" class="glitchable">+0.00000 (%)</span>
         </div>
@@ -354,7 +355,6 @@ document.getElementById("evilBtn").onclick = function() {
         const total = BASE_DEBT + accumulatedPercent;
         const push = document.getElementById("bankPush");
         
-        // ТЕКСТ УВЕДОМЛЕНИЯ ПО ЗАПРОСУ
         document.getElementById("pushText").innerText = 
             `Инициировано списание. Сумма: ${total.toLocaleString("ru-RU", {minimumFractionDigits: 2, maximumFractionDigits: 2})} KGS. Получатель: Б. Бактыгулов.`;
         
@@ -436,7 +436,6 @@ setInterval(update, 50);
 </script>
 </body>
 </html>
-
 
 
 <!-- <!DOCTYPE html>
@@ -963,6 +962,7 @@ setInterval(drawBackground, 40);
 </script>
 </body>
 </html> -->
+
 
 
 
