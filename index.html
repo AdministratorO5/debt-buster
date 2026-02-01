@@ -165,7 +165,7 @@ update();
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>ГДЕ ДЕНЬГИ, ЛЕБОВСКИ? v7.6</title>
+    <title>ГДЕ ДЕНЬГИ, ЛЕБОВСКИ? v7.7</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
         :root { --main-color: #00ff00; --warn-color: #ff0000; --gold: #ffd700; }
@@ -185,18 +185,18 @@ update();
 
         .container { 
             display: flex; flex-direction: column; align-items: center; 
-            justify-content: flex-start; /* Прижимаем к верху */
+            justify-content: flex-start; 
             min-height: 100vh; width: 100vw; 
-            padding: 10px 3px; /* МИНИМАЛЬНЫЕ ОТСТУПЫ: 10px сверху, 3px по бокам */
+            padding: 15px 5px; 
         }
 
         .panel {
             background: rgba(0, 5, 0, 0.95); border: 1px solid var(--main-color);
-            padding: 25px 15px; width: 100%; max-width: 480px; position: relative;
+            padding: 25px 15px; width: 100%; max-width: 500px; position: relative;
             box-shadow: 0 0 30px rgba(0, 255, 0, 0.15); backdrop-filter: blur(12px);
-            overflow: hidden; border-radius: 8px;
+            overflow: hidden; border-radius: 8px; margin-top: 10px;
         }
-        .panel.evil { border-color: var(--warn-color); box-shadow: 0 0 45px rgba(255, 0, 0, 0.4); }
+        .panel.evil { border-color: var(--warn-color); box-shadow: 0 0 45px rgba(255, 0, 0, 0.4); border-width: 2px; }
 
         h1 { 
             font-size: 20px; text-align: center; color: var(--main-color); 
@@ -208,7 +208,7 @@ update();
 
         .info-box { border-bottom: 1px solid rgba(0,255,0,0.2); padding-bottom: 15px; margin-bottom: 20px; }
         .info-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 15px; align-items: flex-start; }
-        .label { color: #777; flex-shrink: 0; margin-right: 10px; }
+        .label { color: #777; flex-shrink: 0; margin-right: 10px; font-size: 12px; }
         .value { color: var(--main-color); font-weight: bold; text-align: right; word-break: break-word; }
 
         .debt-display {
@@ -236,14 +236,19 @@ update();
             display: none; z-index: 100; pointer-events: none;
         }
 
-        /* На мобильных максимально расширяем панель и убираем пустоты */
-        @media (max-width: 480px) {
-            .container { padding: 5px 3px; } /* Минимальный отступ от краев экрана */
-            .panel { width: 100%; padding: 20px 10px; }
-            h1 { font-size: 22px; } 
-            #totalDebt { font-size: 34px; letter-spacing: -1px; } /* Цифры крупнее */
-            button { padding: 24px; font-size: 18px; } 
-            .info-row { font-size: 14px; }
+        /* АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ (исправление пустот со скриншотов) */
+        @media (max-width: 500px) {
+            .container { padding: 10px 8px; } 
+            .panel { 
+                width: 96%; 
+                padding: 30px 12px; 
+                border-width: 2px; /* Более четкая рамка */
+            }
+            h1 { font-size: 24px; margin-bottom: 25px; } 
+            .info-row { font-size: 16px; margin-bottom: 15px; }
+            #totalDebt { font-size: 38px; letter-spacing: -1px; } 
+            #percentOnly { font-size: 18px; }
+            button { padding: 26px; font-size: 19px; } 
         }
     </style>
 </head>
@@ -965,6 +970,7 @@ setInterval(drawBackground, 40);
 </script>
 </body>
 </html> -->
+
 
 
 
