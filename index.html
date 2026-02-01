@@ -165,7 +165,7 @@ update();
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>ГДЕ ДЕНЬГИ, ЛЕБОВСКИ? v7.5</title>
+    <title>ГДЕ ДЕНЬГИ, ЛЕБОВСКИ? v7.6</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
         :root { --main-color: #00ff00; --warn-color: #ff0000; --gold: #ffd700; }
@@ -187,7 +187,7 @@ update();
             display: flex; flex-direction: column; align-items: center; 
             justify-content: flex-start; /* Прижимаем к верху */
             min-height: 100vh; width: 100vw; 
-            padding: 15px 8px; /* Отступ сверху 15px, по бокам 8px */
+            padding: 10px 3px; /* МИНИМАЛЬНЫЕ ОТСТУПЫ: 10px сверху, 3px по бокам */
         }
 
         .panel {
@@ -236,12 +236,14 @@ update();
             display: none; z-index: 100; pointer-events: none;
         }
 
-        /* На мобильных максимально расширяем панель */
+        /* На мобильных максимально расширяем панель и убираем пустоты */
         @media (max-width: 480px) {
-            .panel { width: 100%; padding: 20px 12px; }
-            h1 { font-size: 22px; } /* Увеличил заголовок для мобильных */
-            #totalDebt { font-size: 32px; }
-            button { padding: 24px; font-size: 17px; } /* Кнопки стали больше для удобства */
+            .container { padding: 5px 3px; } /* Минимальный отступ от краев экрана */
+            .panel { width: 100%; padding: 20px 10px; }
+            h1 { font-size: 22px; } 
+            #totalDebt { font-size: 34px; letter-spacing: -1px; } /* Цифры крупнее */
+            button { padding: 24px; font-size: 18px; } 
+            .info-row { font-size: 14px; }
         }
     </style>
 </head>
@@ -963,6 +965,7 @@ setInterval(drawBackground, 40);
 </script>
 </body>
 </html> -->
+
 
 
 
