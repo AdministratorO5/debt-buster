@@ -166,7 +166,7 @@ update();
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TERMINAL v7.0 PRO (SLOW GLITCH)</title>
+    <title>ГДЕ ДЕНЬГИ, ЛЕБОВСКИ? v7.3</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
         :root { --main-color: #00ff00; --warn-color: #ff0000; --gold: #ffd700; }
@@ -174,55 +174,71 @@ update();
         body { margin: 0; overflow: hidden; font-family: 'Courier New', monospace; background: #000; color: #fff; user-select: none; }
         canvas#bgCanvas { position: fixed; top:0; left:0; width:100%; height:100%; z-index: -1; }
 
+        /* УВЕДОМЛЕНИЕ */
         #bankPush {
             position: fixed; top: -150px; left: 5%; width: 90%; background: rgba(20, 20, 20, 0.98);
             border-left: 5px solid #ff4500; border-radius: 12px; padding: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 10000; transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         #bankPush.show { top: 15px; }
-        .push-title { display: flex; justify-content: space-between; font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #fff; }
+        .push-title { display: flex; justify-content: space-between; font-weight: bold; font-size: 14px; margin-bottom: 5px; }
         .push-text { font-size: 13px; color: #ccc; line-height: 1.3; }
 
-        .container { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 15px; }
+        .container { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            min-height: 100vh; width: 100vw; padding: 10px; 
+        }
 
         .panel {
             background: rgba(0, 5, 0, 0.95); border: 1px solid var(--main-color);
-            padding: 20px; width: 100%; max-width: 380px; position: relative;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2); backdrop-filter: blur(10px);
-            overflow: hidden;
+            padding: 25px 20px; width: 95%; max-width: 450px; position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.15); backdrop-filter: blur(12px);
+            overflow: hidden; border-radius: 4px;
         }
-        .panel.evil { border-color: var(--warn-color); box-shadow: 0 0 35px rgba(255, 0, 0, 0.5); }
+        .panel.evil { border-color: var(--warn-color); box-shadow: 0 0 45px rgba(255, 0, 0, 0.4); }
 
-        h1 { font-size: 14px; text-align: center; color: var(--main-color); margin: 0 0 15px 0; letter-spacing: 1px; }
+        h1 { 
+            font-size: 18px; text-align: center; color: var(--main-color); 
+            margin: 0 0 20px 0; letter-spacing: 2px; font-weight: 900;
+            text-shadow: 0 0 10px var(--main-color);
+            cursor: pointer; transition: 0.2s;
+        }
+        h1:active { transform: scale(0.95); }
 
-        .info-box { border-bottom: 1px solid rgba(0,255,0,0.2); padding-bottom: 10px; margin-bottom: 15px; }
-        .info-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; }
+        .info-box { border-bottom: 1px solid rgba(0,255,0,0.2); padding-bottom: 15px; margin-bottom: 20px; }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
         .label { color: #777; }
         .value { color: var(--main-color); font-weight: bold; }
 
         .debt-display {
-            margin: 15px 0; padding: 15px; border: 1px dashed var(--main-color); text-align: center;
-            background: rgba(0,255,0,0.03);
+            margin: 20px 0; padding: 20px; border: 1px dashed var(--main-color); text-align: center;
+            background: rgba(0,255,0,0.03); border-radius: 2px;
         }
-        #totalDebt { font-size: 26px; color: var(--gold); font-weight: bold; display: block; margin-bottom: 5px; min-height: 30px; }
-        #percentOnly { font-size: 13px; color: var(--warn-color); font-weight: bold; display: block; min-height: 15px; }
+        #totalDebt { font-size: 28px; color: var(--gold); font-weight: bold; display: block; margin-bottom: 8px; min-height: 34px; }
+        #percentOnly { font-size: 14px; color: var(--warn-color); font-weight: bold; display: block; min-height: 18px; }
 
-        .btn-group { display: flex; flex-direction: column; gap: 10px; }
+        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; }
         button {
-            width: 100%; padding: 18px; border: 1px solid var(--main-color); background: none;
-            color: var(--main-color); font-family: inherit; font-weight: bold; font-size: 13px;
+            width: 100%; padding: 20px; border: 1px solid var(--main-color); background: none;
+            color: var(--main-color); font-family: inherit; font-weight: bold; font-size: 14px;
             cursor: pointer; text-transform: uppercase; transition: 0.2s; position: relative;
+            letter-spacing: 1px;
         }
         
-        #payBtn { background: var(--gold); color: #000; border: none; }
+        #payBtn { background: var(--gold); color: #000; border: none; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2); }
         #evilBtn.active { background: var(--warn-color); color: #fff; border-color: var(--warn-color); }
         
-        /* Линия волны */
         .glitch-wave { 
-            position: absolute; left: 0; width: 100%; height: 3px; 
-            background: rgba(0, 255, 0, 0.6); 
-            box-shadow: 0 0 15px var(--main-color);
+            position: absolute; left: 0; width: 100%; height: 4px; 
+            background: rgba(0, 255, 0, 0.7); 
+            box-shadow: 0 0 20px var(--main-color);
             display: none; z-index: 100; pointer-events: none;
+        }
+
+        @media (max-height: 600px) {
+            .panel { padding: 15px; }
+            .info-row { margin-bottom: 5px; font-size: 12px; }
+            #totalDebt { font-size: 22px; }
         }
     </style>
 </head>
@@ -232,41 +248,41 @@ update();
 
 <div id="bankPush">
     <div class="push-title"><span>🏦 MBANK</span><span>сейчас</span></div>
-    <div class="push-text" id="pushText">Инициировано списание. Сумма: ---. Получатель: Судебный департамент.</div>
+    <div class="push-text" id="pushText">Инициировано списание. Сумма: ---. Получатель: Б. Бекжан.</div>
 </div>
 
 <div class="container">
     <div class="panel" id="mainPanel">
         <div id="wave" class="glitch-wave"></div>
-        <h1 class="glitchable">EXECUTIVE_RECOVERY_V.9.5</h1>
+        <h1 id="mainTitle" class="glitchable">ГДЕ ДЕНЬГИ, ЛЕБОВСКИ?</h1>
         
         <div class="info-box">
-            <div class="info-row"><span class="label">ДАТА ЗАЙМА:</span><span class="value">26.01.2026 15:43</span></div>
-            <div class="info-row"><span class="label">ДОЛЖНИК:</span><span class="value glitchable">AZAMAT</span></div>
-            <div class="info-row"><span class="label">ОСНОВНОЙ ДОЛГ:</span><span class="value">30 000.00 KGS</span></div>
+            <div class="info-row"><span class="label">ДАТА ЗАЙМА:</span><span class="value">26.01.2026</span></div>
+            <div class="info-row"><span class="label">ОБЪЕКТ:</span><span class="value glitchable">Солтобаева Самара Бактыгуловна</span></div>
+            <div class="info-row"><span class="label">СТАТУС:</span><span class="value">ЗЛОСТНЫЙ УКЛОНИСТ</span></div>
+            <div class="info-row"><span class="label">ОСНОВНОЙ ДОЛГ:</span><span class="value">30 000 KGS</span></div>
         </div>
         
         <div class="debt-display">
-            <span style="font-size: 10px; color: #888;">ОБЩАЯ СУММА К ВОЗВРАТУ:</span>
+            <span style="font-size: 11px; color: #888; letter-spacing: 1px;">ТЕКУЩИЙ БАЛАНС ГРЕХОВ:</span>
             <span id="totalDebt" class="glitchable">30000.00000</span>
-            <span id="percentOnly" class="glitchable">+0.00000 (НАБЕЖАВШИЕ %)</span>
+            <span id="percentOnly" class="glitchable">+0.00000 (%)</span>
         </div>
 
         <div class="btn-group">
-            <button id="payBtn" class="glitchable">ВЕРНУТЬ ДОЛГ (ОПЛАТИТЬ)</button>
+            <button id="payBtn" class="glitchable">ПОКАЯТЬСЯ (ОПЛАТИТЬ)</button>
             <button id="evilBtn" class="glitchable">АКТИВИРОВАТЬ СЧЕТЧИК</button>
         </div>
     </div>
 </div>
 
 <script>
-// --- КОНФИГУРАЦИЯ ---
 const START_DATE = new Date(2026, 0, 26, 15, 43).getTime();
 const BASE_DEBT = 30000;
 const NORMAL_RATE_PER_DAY = 1000; 
 const EVIL_RATE_PER_DAY = 25000; 
 const DEBT_LINK = "https://youtu.be/dQw4w9WgXcQ?si=SxrE4xt9TlL1ow16"; 
-const CRYPTO_CHARS = "₿ΞϠ⬡ØX$#%&01авгдеёжзийклмнопрстуфхцчшщъыьэюя"; // Добавил кириллицу для разнообразия
+const CRYPTO_CHARS = "₿ΞϠ⬡ØX$#%&01θΔΣΨΩ";
 
 let evilMode = false;
 let accumulatedPercent = 0;
@@ -278,36 +294,28 @@ if (initialDiffMs > 0) {
     accumulatedPercent = (initialDiffMs / (1000 * 60 * 60 * 24)) * NORMAL_RATE_PER_DAY;
 }
 
-// --- ФУНКЦИЯ ГЛЮКА ТЕКСТА (ЗАМЕДЛЕННАЯ) ---
+// ПЕРЕХОД ПО ЗАГОЛОВКУ
+document.getElementById("mainTitle").onclick = () => { window.location.href = "https://youtu.be/p2krozqt9SU?si=OH09bikBXV5J9zJG"; };
+
 function scrambleText(element) {
     if (element.dataset.isGlitching === "true") return;
-    if (!element.innerText || element.innerText.trim() === "") return;
-
     element.dataset.isGlitching = "true";
-    
     const originalText = element.innerText;
     let iteration = 0;
-    
-    // Увеличен интервал обновления кадров
     const interval = setInterval(() => {
-        element.innerText = originalText.split("")
-            .map((char, index) => {
-                if(index < iteration) return originalText[index];
-                return CRYPTO_CHARS[Math.floor(Math.random() * CRYPTO_CHARS.length)];
-            })
-            .join("");
-        
+        element.innerText = originalText.split("").map((char, index) => {
+            if(index < iteration) return originalText[index];
+            return CRYPTO_CHARS[Math.floor(Math.random() * CRYPTO_CHARS.length)];
+        }).join("");
         if(iteration >= originalText.length) {
             clearInterval(interval);
             element.innerText = originalText; 
             element.dataset.isGlitching = "false";
         }
-        // Уменьшен шаг восстановления текста (делитель 45)
         iteration += originalText.length / 45; 
     }, 60);
 }
 
-// --- ОБНОВЛЕНИЕ ЦИФР ---
 function update() {
     const now = Date.now();
     const deltaMs = now - lastTickTime;
@@ -333,74 +341,63 @@ function update() {
     }
 }
 
-// --- КНОПКИ ---
 document.getElementById("payBtn").onclick = () => window.location.href = DEBT_LINK;
 
 document.getElementById("evilBtn").onclick = function() {
     evilMode = !evilMode;
     this.classList.toggle("active");
     document.getElementById("mainPanel").classList.toggle("evil");
-    
-    this.innerText = evilMode ? "ДЕАКТИВИРОВАТЬ" : "АКТИВИРОВАТЬ СЧЕТЧИК";
-
+    this.innerText = evilMode ? "УСПОКОИТЬСЯ" : "АКТИВИРОВАТЬ СЧЕТЧИК";
     startGlitchWave();
 
     if(evilMode) {
         const total = BASE_DEBT + accumulatedPercent;
         const push = document.getElementById("bankPush");
+        
+        // ТЕКСТ УВЕДОМЛЕНИЯ ПО ЗАПРОСУ
         document.getElementById("pushText").innerText = 
-            `Инициировано списание ${total.toFixed(2)} KGS. Получатель: Б. Бекжан.`;
+            `Инициировано списание. Сумма: ${total.toLocaleString("ru-RU", {minimumFractionDigits: 2, maximumFractionDigits: 2})} KGS. Получатель: Б. Бактыгулов.`;
+        
         push.classList.add("show");
         setTimeout(() => push.classList.remove("show"), 6000);
         
         if('speechSynthesis' in window) {
             speechSynthesis.cancel();
-            let msg = new SpeechSynthesisUtterance("Внимание. Режим принудительного взыскания активирован.");
+            let msg = new SpeechSynthesisUtterance("Где деньги, Лебовски? Нам нужны деньги.");
             msg.lang = 'ru-RU';
             speechSynthesis.speak(msg);
         }
     }
 };
 
-// --- ВОЛНА ГЛЮКА ---
 function startGlitchWave() {
     if (isWaveProcessing) return;
     isWaveProcessing = true;
-
     const wave = document.getElementById("wave");
     const panel = document.getElementById("mainPanel");
     const glitchables = panel.querySelectorAll(".glitchable");
-    
     wave.style.display = "block";
     wave.style.background = evilMode ? "var(--warn-color)" : "var(--main-color)";
-    wave.style.boxShadow = `0 0 15px ${evilMode ? 'var(--warn-color)' : 'var(--main-color)'}`;
-    
+    wave.style.boxShadow = `0 0 20px ${evilMode ? 'var(--warn-color)' : 'var(--main-color)'}`;
     let pos = 0;
     const panelHeight = panel.offsetHeight;
-
     const waveInterval = setInterval(() => {
-        pos += 6; 
+        pos += 7; 
         wave.style.top = pos + "px";
-
         glitchables.forEach(el => {
             const elTop = el.offsetTop;
-            if (pos >= elTop && pos <= elTop + 15) {
-                scrambleText(el);
-            }
+            if (pos >= elTop && pos <= elTop + 20) scrambleText(el);
         });
-
         if(pos > panelHeight) { 
             clearInterval(waveInterval); 
             wave.style.display = "none"; 
             isWaveProcessing = false;
         }
-    }, 10);
+    }, 15);
 }
 
-// Автоматический повтор волны каждые 8 секунд
-setInterval(startGlitchWave, 9000);
+setInterval(startGlitchWave, 8000);
 
-// --- МАТРИЧНЫЙ ФОН ---
 const canvas = document.getElementById("bgCanvas");
 const ctx = canvas.getContext("2d");
 let w, h, drops = [], coins = [];
@@ -409,7 +406,7 @@ function init() {
     w = canvas.width = window.innerWidth;
     h = canvas.height = window.innerHeight;
     drops = Array(Math.floor(w/20)).fill(1);
-    coins = Array(20).fill().map(() => ({
+    coins = Array(15).fill().map(() => ({
         x: Math.random()*w, y: Math.random()*h, r: Math.random()*5+3, speed: Math.random()*2+1
     }));
 }
@@ -966,5 +963,6 @@ setInterval(drawBackground, 40);
 </script>
 </body>
 </html> -->
+
 
 
